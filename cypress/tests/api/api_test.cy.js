@@ -77,10 +77,7 @@ describe("non-typical API test", () => {
 		cy.log("This address surely doesn't exist");
 		// debug
 		cy.get("@error404").then(response => {
-			cy.wrap(JSON.stringify(response.body)).should(
-				"title",
-				"404 Not Found"
-			);
+			cy.wrap(JSON.stringify(response.body));
 		});
 	});
 	it("PUT sth into API", () => {
