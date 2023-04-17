@@ -80,81 +80,81 @@ describe("non-typical API test", () => {
 			cy.wrap(JSON.stringify(response.body));
 		});
 	});
-});
-it("PUT sth into API", () => {
-	cy.request({
-		method: "PUT",
-		url: "https://httpbin.org/anything",
-		body: {
-			manufacturer: "Apel",
-			model: "Astral",
-			since: "1991",
-			takenBy: "General Motors",
-		},
-		failOnStatusCode: false,
-	}).as("putting");
-	cy.log("Object has been put");
-	cy.get("@putting").its("status").should("eq", 200);
-	cy.get("@putting").then(response => {
-		cy.log(JSON.stringify(response.body));
-	});
-});
-it("Now lets DELETE one object", () => {
-	cy.request({
-		method: "DELETE",
-		url: "https://httpbin.org/anything",
-		failOnStatusCode: false,
-	}).as("deleted");
-	cy.get("@deleted").its("status").should("eq", 200);
-	cy.get("@deleted").then(response => {
-		cy.log(JSON.stringify(response.body));
-	});
-});
-it("install User-Agent", () => {
-	cy.request({
-		method: "GET",
-		url: "https://httpbin.org/headers",
-		headers: {
-			"user-agent": "My test user-agent",
-		},
-		failOnStatusCode: false,
-	})
-		.as("installAgent")
-		.then("test that user-agent set correctly", () => {
-			cy.get("@installAgent").then(response => {
-				assert.equal(200, response.status);
-				assert.equal(
-					"My test user-agent",
-					response.requestHeaders["user-agent"]
-				);
-			});
+	it("PUT sth into API", () => {
+		cy.request({
+			method: "PUT",
+			url: "https://httpbin.org/anything",
+			body: {
+				manufacturer: "Apel",
+				model: "Astral",
+				since: "1991",
+				takenBy: "General Motors",
+			},
+			failOnStatusCode: false,
+		}).as("putting");
+		cy.log("Object has been put");
+		cy.get("@putting").its("status").should("eq", 200);
+		cy.get("@putting").then(response => {
+			cy.log(JSON.stringify(response.body));
 		});
-});
-it("Let's set some cookies", () => {
-	cy.request({
-		method: "GET",
-		url: "https://httpbin.org/headers",
-		headers: {
-			Ciasteczko: 90210,
-		},
-		failOnStatusCode: false,
-	}).as("cookies");
-	cy.get("@cookies").then(response => {
-		cy.log(JSON.stringify(response.body));
 	});
-});
-it("Now let's randomize data", () => {
-	it("test random ids", () => {
-		for (let i = 0; i < 10; i++) {
-			const randomId = getRandomInt(10000000);
-
-			cy.request({
-				url: "https://httpbin.org/headers",
-				id: randomId,
-			}).as("randomID");
-			cy.get("@randomID").then(response => {
-				assert.isTrue(response.status == 200);
+	it("Now lets DELETE one object", () => {
+		cy.request({
+			method: "DELETE",
+			url: "https://httpbin.org/anything",
+			failOnStatusCode: false,
+		}).as("deleted");
+		cy.get("@deleted").its("status").should("eq", 200);
+		cy.get("@deleted").then(response => {
+			cy.log(JSON.stringify(response.body));
+		});
+	});
+	it("install User-Agent", () => {
+		cy.request({
+			method: "GET",
+			url: "https://httpbin.org/headers",
+			headers: {
+				"user-agent": "My test user-agent",
+			},
+			failOnStatusCode: false,
+		})
+			.as("installAgent")
+			.then("test that user-agent set correctly", () => {
+				cy.get("@installAgent").then(response => {
+					assert.equal(200, response.status);
+					assert.equal(
+						"My test user-agent",
+						response.requestHeaders["user-agent"]
+					);
+				});
 			});
-		}
+	});
+	it("Let's set some cookies", () => {
+		cy.request({
+			method: "GET",
+			url: "https://httpbin.org/headers",
+			headers: {
+				Ciasteczko: 90210,
+			},
+			failOnStatusCode: false,
+		}).as("cookies");
+		cy.get("@cookies").then(response => {
+			cy.log(JSON.stringify(response.body));
+		});
+	});
+	it("Now let's randomize data", () => {
+		it("test random ids", () => {
+			for (let i = 0; i < 10; i++) {
+				const randomId = getRandomInt(10000000);
+
+				cy.request({
+					url: "https://httpbin.org/headers",
+					id: randomId,
+				}).as("randomID");
+				cy.get("@randomID").then(response => {
+					assert.isTrue(response.status == 200);
+				});
+			}
+		});
 	});
 });
